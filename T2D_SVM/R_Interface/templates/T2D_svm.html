@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC >
+<html>
+<head>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs
+/jquery/1.4.0/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
+
+    SVM Classification
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="icon" type="image/x-icon"  href="IconLogo.ico" />
+    <title>Hua Medicine Classification Algorithm
+    </title>
+    <style type="text/css">
+        img {
+            float: right;
+            margin-right: 30px;
+        }
+    </style>
+</head>
+
+<body>
+<img src="logo.png">
+<h1>Type 2 Diabetes Patients SubClassify Program</h1>
+<br>
+<h2>Paitent's Info</h2>
+
+<h3>Basic Info</h3>
+<P>
+HbA1c:
+<input type="text" id="HbA1c" name="HbA1c"/>
+Age:
+<input type="text" id="Age" name="Age"/>
+BMI:
+<input type="text" id="BMI" name="BMI"/>
+TG:
+<input type="text" id="TG" name="TG"/>
+</P>
+
+<h3>Glucose levels</h3>
+<P>
+0 min Glucose:
+<input type="text" id="GLU" name="GLU"/>
+30 min Glucose:
+<input type="text" id="GLU30" name="GLU30"/>
+60 min Glucose:
+<input type="text" id="GLU60" name="GLU60"/>
+120 min Glucose:
+<input type="text" id="GLU120" name="GLU120"/>
+</p>
+
+<h3>C-peptide levels</h3>
+<P>
+0 min C-peptide:
+<input type="text" id="CP" name="CP"/>
+30 min C-peptide:
+<input type="text" id="CP30" name="CP30"/>
+60 min C-peptide:
+<input type="text" id="CP60" name="CP60"/>
+120 min C-peptide:
+<input type="text" id="CP120" name="CP120"/>
+</P>
+
+<h3>Insulin levels</h3>
+<P>
+0 min Insulin:
+<input type="text" id="INS" name="INS"/>
+30 min Insulin:
+<input type="text" id="INS30" name="INS30"/>
+60 min Insulin:
+<input type="text" id="INS60" name="INS60"/>
+120 min Insulin:
+<input type="text" id="INS120" name="INS120"/>
+</P>
+
+
+
+<button type="button" onclick="submit()">submit</button>
+<br><br><br><br>
+<h1 id="h1" hidden="hidden">start uploading file.......</h1>
+<h1 id="h2" hidden="hidden">successfully uploaded file !</h1>
+<br>
+<h1 id="h3" hidden="hidden">start running.......</h1>
+<a href="/download/"><h1 id="h4" hidden="hidden">running is over, please check the result !</h1></a>
+</body>
+<script type="application/javascript">
+    var folder_path;
+    var outputName;
+    function upload_file() {
+        var form_data = new FormData();
+        var files=$('#file')[0].files;
+        if (files == undefined) {
+            alert("No file has been selected !");
+            return false;
+        }
+        console.log(files.length);
+        for (var i=0;i<files.length;++i){
+            form_data.append(i, files[i]);
+        }
+        //send ajax request of file upload
+        $('#h1').show();
+        $.ajax({
+            url: '/upload_file/',
+            type: 'POST',
+            data: form_data,
+            processData: false,
+            contentType: false,
+            success: function (return_data) {
+                if (return_data != 1) {
+                    folder_path = return_data;
+                    alert(folder_path);
+                    $('#h2').show();
+                    //alert("file has been uploaded");
+                }else {
+                    alert("fail to upload file !")
+                }
+            }
+        });
+    }
+    function submit() {
+        //submit_job
+        var HbA1c = $('#HbA1c')[0].value;
+        var Age = $('#Age')[0].value;
+        var BMI = $('#BMI')[0].value;
+		var TG = $('#TG')[0].value;
+		var GLU = $('#GLU')[0].value;
+		var GLU30 = $('#GLU30')[0].value;
+		var GLU60 = $('#GLU60')[0].value;
+		var GLU120 = $('#GLU120')[0].value;
+		var CP = $('#CP')[0].value;
+		var CP30 = $('#CP30')[0].value;
+		var CP60 = $('#CP60')[0].value;
+		var CP120 = $('#CP120')[0].value;
+		var INS = $('#INS')[0].value;
+		var INS30 = $('#INS30')[0].value;
+		var INS60 = $('#INS60')[0].value;
+		var INS120 = $('#INS120')[0].value;
+
+        var params = {
+            'HbA1c': HbA1c,
+            'Age': Age,
+            'BMI': BMI,
+			'TG': TG,
+			'GLU': GLU,
+			'GLU30': GLU30,
+			'GLU60': GLU60,
+            'GLU120': GLU120
+            'CP': CP,
+			'CP30': CP30,
+			'CP60': CP60,
+            'CP120': CP120
+			'INS': INS,
+			'INS30': INS30,
+			'INS60': INS60,
+            'INS120': INS120
+
+        };
+        $('#h3').show();
+        $('#h4').hide();
+        $.ajax({
+            url: '/submit_job/',
+            type: 'POST',
+            data: params,
+            dataType: 'json',
+            success: function (return_data) {
+                if (return_data == 0) {
+                    alert("job finished !");
+                    $('#h4').show();
+                } else {
+                    alert("error occurred");
+                }
+            }
+        });
+    }
+
+</script>
+</html>
