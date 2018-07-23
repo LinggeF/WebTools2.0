@@ -1,0 +1,18 @@
+body, div, form, input, label {
+	margin: 0;
+	padding: 0;
+}
+body {
+	padding:0 2%;
+}
+#theme {
+	margin-bottom: 5%;
+}
+img {
+	position: absolute;
+	right: 2%;
+	top: 1%;
+}
+button {
+	width: 20%;
+}
